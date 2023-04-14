@@ -1,6 +1,18 @@
 const express = require('express');
 
-const { getAllManagers, getManagerById } = require('../utils/readAndWriteFiles.js');
+const {
+  getAllManagers,
+  getManagerById,
+  getLastId,
+  insertManagerInFile,
+} = require('../utils/readAndWriteFiles.js');
+
+const auth = require('../middlewares/auth');
+const validateName = require('../middlewares/validateName');
+const validateTalk = require('../middlewares/validateTalk');
+const validateAge = require('../middlewares/validateAge');
+const validateWatchedAt = require('../middlewares/validateWatchedAt');
+const validateRate = require('../middlewares/validateRate');
 
 const talkerRoute = express.Router();
 
@@ -15,6 +27,21 @@ talkerRoute.get('/:id', async (req, res) => {
   const manager = await getManagerById(+id);
   if (!manager) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   return res.status(200).json(manager);
+});
+
+const validations = [auth, validateName, validateAge, validateTalk, validateWatchedAt, validateRate];
+
+talkerRoute.post('/', validations, async (req, res) => {
+  const { name, age, talk } = req.body;
+  const lastId = (await getLastId()) + 1;
+  const newManager = {
+    name,
+    age,
+    id: lastId,
+    talk,
+  };
+  await insertManagerInFile(newManager);
+  return res.status(201).json(newManager);
 });
 
 module.exports = talkerRoute;

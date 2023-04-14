@@ -24,9 +24,26 @@ const getManagerById = async (id) => {
 
 const generateToken = () => crypto.randomBytes(8).toString('hex');
 
+const getLastId = async () => {
+  const allManagers = await readTalkerManagerFile();
+  return allManagers.length;
+};
+
+const insertManagerInFile = async (manager) => {
+  try {
+    const allManagers = await readTalkerManagerFile();
+    allManagers.push(manager);
+    return await fs.writeFile('src/talker.json', JSON.stringify(allManagers));
+  } catch (err) {
+    return null;
+  }
+};
+
 module.exports = {
   readTalkerManagerFile,
   getAllManagers,
   getManagerById,
   generateToken,
+  insertManagerInFile,
+  getLastId,
 };
