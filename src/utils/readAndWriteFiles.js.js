@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const crypto = require('crypto');
 const { join } = require('path');
 
 const readTalkerManagerFile = async () => {
@@ -21,8 +22,13 @@ const getManagerById = async (id) => {
   return managers.find((manager) => manager.id === id);
 };
 
+const generateToken = () => {
+  return crypto.randomBytes(8).toString('hex');
+};
+
 module.exports = {
   readTalkerManagerFile,
   getAllManagers,
   getManagerById,
+  generateToken,
 };
