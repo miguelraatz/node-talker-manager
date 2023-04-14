@@ -5,6 +5,7 @@ const {
   getManagerById,
   getLastId,
   insertManagerInFile,
+  editManagerInFile,
 } = require('../utils/readAndWriteFiles.js');
 
 const auth = require('../middlewares/auth');
@@ -49,6 +50,22 @@ talkerRoute.post('/', validations, async (req, res) => {
   };
   await insertManagerInFile(newManager);
   return res.status(201).json(newManager);
+});
+
+talkerRoute.put('/:id', validations, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const editManager = {
+    name,
+    age,
+    id: +id,
+    talk,
+  };
+  const manager = await editManagerInFile(editManager, id);
+  if (!manager) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  return res.status(200).json(editManager);
 });
 
 module.exports = talkerRoute;
