@@ -1,11 +1,11 @@
 const express = require('express');
 const { generateToken } = require('../utils/readAndWriteFiles.js');
-const validateLogin = require('../middlewares/validateLogin');
+const validateEmail = require('../middlewares/validateEmail');
+const validatePassword = require('../middlewares/validatePassword');
 
 const loginRoute = express.Router();
 
-loginRoute.post('/', validateLogin, async (req, res) => {
-  // const { email, password } = req.body;
+loginRoute.post('/', validateEmail, validatePassword, async (_req, res) => {
   const token = generateToken();
   return res.status(200).json({ token });
 });
