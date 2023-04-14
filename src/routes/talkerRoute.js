@@ -29,7 +29,14 @@ talkerRoute.get('/:id', async (req, res) => {
   return res.status(200).json(manager);
 });
 
-const validations = [auth, validateName, validateAge, validateTalk, validateWatchedAt, validateRate];
+const validations = [
+  auth,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+];
 
 talkerRoute.post('/', validations, async (req, res) => {
   const { name, age, talk } = req.body;
