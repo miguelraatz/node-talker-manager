@@ -16,7 +16,13 @@ const getAllManagers = async () => {
   return allManagers;
 };
 
+const getManagerById = async (id) => {
+  const managers = await readTalkerManagerFile();
+  return managers.find((manager) => manager.id === id);
+};
+
 module.exports = {
   readTalkerManagerFile,
   getAllManagers,
+  getManagerById,
 };
