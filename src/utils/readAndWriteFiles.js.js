@@ -14,7 +14,7 @@ const readTalkerManagerFile = async () => {
 const getAllManagers = async () => {
   const allManagers = await readTalkerManagerFile();
   return allManagers;
-}
+};
 
 module.exports = {
   readTalkerManagerFile,
