@@ -54,6 +54,13 @@ const editManagerInFile = async (post, id) => {
   return changedManager;
 };
 
+const deleteManager = async (id) => {
+  const allManagers = await readTalkerManagerFile();
+  const newManagers = allManagers.filter((manager) => manager.id !== +id);
+  await fs.writeFile('src/talker.json', JSON.stringify(newManagers));
+  return newManagers;
+};
+
 module.exports = {
   readTalkerManagerFile,
   getAllManagers,
@@ -62,4 +69,5 @@ module.exports = {
   insertManagerInFile,
   getLastId,
   editManagerInFile,
+  deleteManager,
 };

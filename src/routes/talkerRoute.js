@@ -6,6 +6,7 @@ const {
   getLastId,
   insertManagerInFile,
   editManagerInFile,
+  deleteManager,
 } = require('../utils/readAndWriteFiles.js');
 
 const auth = require('../middlewares/auth');
@@ -66,6 +67,12 @@ talkerRoute.put('/:id', validations, async (req, res) => {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
   return res.status(200).json(editManager);
+});
+
+talkerRoute.delete('/:id', auth, async (req, res) => {
+  const { id } = req.params;
+  await deleteManager(id);
+  return res.status(204).json();
 });
 
 module.exports = talkerRoute;
