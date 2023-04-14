@@ -22,9 +22,7 @@ const getManagerById = async (id) => {
   return managers.find((manager) => manager.id === id);
 };
 
-const generateToken = () => {
-  return crypto.randomBytes(8).toString('hex');
-};
+const generateToken = () => crypto.randomBytes(8).toString('hex');
 
 module.exports = {
   readTalkerManagerFile,
