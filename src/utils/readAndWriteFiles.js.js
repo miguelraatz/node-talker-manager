@@ -61,6 +61,12 @@ const deleteManager = async (id) => {
   return newManagers;
 };
 
+const searchByName = async (name) => {
+  const talkers = await getAllManagers();
+  return talkers.filter((talker) =>
+    talker.name.toLowerCase().includes(name.toLowerCase()));
+};
+
 module.exports = {
   readTalkerManagerFile,
   getAllManagers,
@@ -70,4 +76,5 @@ module.exports = {
   getLastId,
   editManagerInFile,
   deleteManager,
+  searchByName,
 };

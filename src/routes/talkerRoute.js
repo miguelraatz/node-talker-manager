@@ -7,6 +7,7 @@ const {
   insertManagerInFile,
   editManagerInFile,
   deleteManager,
+  searchByName,
 } = require('../utils/readAndWriteFiles.js');
 
 const auth = require('../middlewares/auth');
@@ -15,8 +16,28 @@ const validateTalk = require('../middlewares/validateTalk');
 const validateAge = require('../middlewares/validateAge');
 const validateWatchedAt = require('../middlewares/validateWatchedAt');
 const validateRate = require('../middlewares/validateRate');
+const validateSearch = require('../middlewares/validateSearch');
 
 const talkerRoute = express.Router();
+
+const validations = [
+  auth,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+];
+
+talkerRoute.get('/search', auth, validateSearch, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await getAllManagers();
+  if (!q || q === '') {
+    return res.status(200).json(talkers);
+  }
+  const talkerByName = await searchByName(q);
+  return res.status(200).json(talkerByName);
+});
 
 talkerRoute.get('/', async (_req, res) => {
   const managers = await getAllManagers();
@@ -30,15 +51,6 @@ talkerRoute.get('/:id', async (req, res) => {
   if (!manager) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   return res.status(200).json(manager);
 });
-
-const validations = [
-  auth,
-  validateName,
-  validateAge,
-  validateTalk,
-  validateWatchedAt,
-  validateRate,
-];
 
 talkerRoute.post('/', validations, async (req, res) => {
   const { name, age, talk } = req.body;
